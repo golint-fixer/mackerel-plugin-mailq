@@ -1,0 +1,12 @@
+language: go
+go:
+  - 1.6
+
+install:
+  - go get -u github.com/golang/lint/golint
+  - go get -u github.com/laher/goxc
+  - go get ./...
+
+script:
+  - golint ./... | tee ./golint.txt; test ! -s golint.txt
+  - goxc -tasks='validate,xc,archive,rmbin' -d=. -bc='linux,386 linux,amd64'
