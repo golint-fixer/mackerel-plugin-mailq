@@ -11,13 +11,18 @@ script:
   - golint ./... | tee ./golint.txt; test ! -s golint.txt
   - goxc -tasks='validate,xc,archive,rmbin' -d=. -bc='linux,386 linux,amd64'
 
+before_deploy:
+  - cd snapshot
+  - sha256sum * > SHA256SUMS
+
 deploy:
   provider: releases
   api_key:
     secure: sk4fGH1FVTHIJ36/dNwquzijUIDjq0M+AztIoEj0Tr4mi9A6ju7lUzKHy1EFvVhpojZ9U10N8jS47mIcupcm9T9Va2PMyAu+f4x+thOY+tB1ipRW5NJWqjGxP3vY7j8V0lR4C77qZSSnZ6yvuanKqrXFhWnS2S2rB6s2qCvv51K7IQSCIpiPFGdBDojJ7+PQjUJ0WatJv5/fL5ih0HycLw1iXV2+B+aeETmB6cMdBnva2gZKSFgknJs1oQLBKGmCRuX0rsD0PFxQpLca5U+EcXCdaM+rk2Hmjy/A26viZ0wH7xWgEHD7Ruw1/wSX0y985Eo50BhYq3Ga8monmZtrfVzj3IKPFuZKeHFeNopm/Io+KyxHdcJkPryBHkkHMOwk7IGX4BraGM91Uo21T9F+QUQpot4mDfq3nlQ86VUq7G39q4Q/UkxbvJ8OKNCU6qicxjTxLUe+QlMnJhSOnlPLV+LqoObdJgw/RIBh1LHAWCqA2+wDs1yUSGFU4qJaoULUzeJsWZPPxATF/fRDPm80mIN+NfGljlGScbnALuApBeZOiMy6+m1SySHWzDD/6eDt58sEVJimB2wGRhYS9J3ORmSbO1RU3+tOzUiMtjvrxxTr457AxrfXmxhEkuePvQFZFDYKc//GZLqP8MjLKN+zNuhb0PRztw6MlpJycXABGwU=
   file:
-    - snapshot/mackerel-plugin-mailq_linux_386.tar.gz
-    - snapshot/mackerel-plugin-mailq_linux_amd64.tar.gz
+    - SHA256SUMS
+    - mackerel-plugin-mailq_linux_386.tar.gz
+    - mackerel-plugin-mailq_linux_amd64.tar.gz
   on:
     repo: hanazuki/mackerel-plugin-mailq
     tags: true
